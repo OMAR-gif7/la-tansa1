@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f1e7" />
+  <title>لا تنسى</title>
+  <script>
+    /* تطبيق الثيم قبل الرسم لتجنب وميض الألوان */
+    (function () {
+      try {
+        var t = localStorage.getItem("latansa_theme");
+        if (t === "dark") document.documentElement.setAttribute("data-theme", "dark");
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════ بصمة المطوّر — Developer Splash ═══════ -->
+  <div id="splash" aria-hidden="true">
+    <div class="splash-inner">
+      <div class="splash-mark"><span>✓</span></div>
+      <p class="splash-line">تم برمجة هذا العمل بواسطة</p>
+      <p class="splash-name">أبـﯟ ؏ـبـدﷲ</p>
+    </div>
+  </div>
+
+  <!-- ═══════ الشاشة الرئيسية ═══════ -->
+  <section id="view-home" class="view">
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand">
+          <span class="logo-mark">✓</span>
+          <h1>لا تنسى</h1>
+        </div>
+        <button id="btn-theme" class="icon-btn" aria-label="تبديل الوضع الليلي">🌙</button>
+      </div>
+      <p class="greeting" id="greeting">أهلًا بك</p>
+      <div class="stats" id="home-stats"></div>
+    </header>
+
+    <button id="btn-new-list" class="btn btn-primary btn-big">＋ قائمة جديدة</button>
+
+    <!-- نموذج إنشاء قائمة -->
+    <form id="form-new-list" class="card form-hidden">
+      <input type="text" id="input-list-name" placeholder="اسم القائمة، مثال: قائمة السوق" autocomplete="off" />
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">إنشاء</button>
+        <button type="button" id="btn-cancel-new" class="btn btn-ghost">إلغاء</button>
+      </div>
+    </form>
+
+    <div id="lists-container"></div>
+    <div id="empty-home" class="empty-state hidden">
+      <div class="empty-icon">🗒️</div>
+      <p class="empty-title">لسه مفيش حاجة هنا</p>
+      <p class="empty-sub">اعمل أول قائمة وخلي النسيان علينا</p>
+    </div>
+
+    <!-- قسم التواصل -->
+    <section class="contact card">
+      <h2 class="contact-title">تواصل مع المشرف</h2>
+      <p class="contact-sub">سؤال؟ اقتراح؟ تبليغ عن مشكلة؟</p>
+      <div class="contact-buttons">
+        <a class="contact-btn instagram" href="https://instagram.com/3abo_abdoo" target="_blank" rel="noopener">
+          <span class="contact-icon">◎</span> Instagram
+        </a>
+        <a class="contact-btn whatsapp" href="https://wa.me/201040716773" target="_blank" rel="noopener">
+          <span class="contact-icon">✆</span> WhatsApp
+        </a>
+      </div>
+    </section>
+
+    <footer class="dev-footer">صُنع بعناية · أبـﯟ ؏ـبـدﷲ</footer>
+  </section>
+
+  <!-- ═══════ شاشة القائمة ═══════ -->
+  <section id="view-list" class="view hidden">
+    <header class="app-header list-header">
+      <button id="btn-back" class="btn btn-ghost btn-back">‹ رجوع</button>
+      <div class="list-header-row">
+        <div class="list-header-text">
+          <h1 id="list-title"></h1>
+          <p id="list-progress" class="subtitle"></p>
+        </div>
+        <!-- مؤشر تقدم دائري -->
+        <div class="ring-wrap" aria-hidden="true">
+          <svg class="ring" viewBox="0 0 44 44">
+            <circle class="ring-bg" cx="22" cy="22" r="18"></circle>
+            <circle class="ring-fill" id="ring-fill" cx="22" cy="22" r="18"></circle>
+          </svg>
+          <span class="ring-label" id="ring-label">0%</span>
+        </div>
+      </div>
+    </header>
+
+    <form id="form-add-item" class="card add-form">
+      <input type="text" id="input-item-text" placeholder="أضف عنصرًا..." autocomplete="off" />
+      <button type="submit" class="btn btn-primary" aria-label="إضافة">＋</button>
+    </form>
+
+    <ul id="items-container" class="items-list"></ul>
+
+    <div id="empty-list" class="empty-state hidden">
+      <div class="empty-icon">✍️</div>
+      <p class="empty-title">القائمة فاضية</p>
+      <p class="empty-sub">اكتب أول عنصر فوق وابدأ ✨</p>
+    </div>
+
+    <div class="list-actions">
+      <button id="btn-uncheck-all" class="btn btn-ghost">↺ إلغاء تحديد الكل</button>
+      <button id="btn-rename" class="btn btn-ghost">✎ إعادة التسمية</button>
+      <button id="btn-delete-list" class="btn btn-danger">🗑 حذف القائمة</button>
+    </div>
+  </section>
+
+  <!-- ═══════ نافذة الحوار المخصصة ═══════ -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal card" role="dialog" aria-modal="true">
+      <p id="modal-message" class="modal-message"></p>
+      <input type="text" id="modal-input" class="hidden" autocomplete="off" />
+      <div class="modal-actions">
+        <button id="modal-confirm" class="btn btn-primary">تأكيد</button>
+        <button id="modal-cancel" class="btn btn-ghost">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ تنبيه Toast ═══════ -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

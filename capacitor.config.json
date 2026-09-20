@@ -1,0 +1,8 @@
+{
+  "appId": "com.abdullah.latansa",
+  "appName": "لا تنسى",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
